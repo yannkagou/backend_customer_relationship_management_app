@@ -2,10 +2,10 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from .views import LeadViewSet
+from .views import TeamViewSet
 
 router = DefaultRouter()
-router.register('leads', LeadViewSet, basename='leads')
+router.register('teams', TeamViewSet, basename='teams')
 
 urlpatterns = [
     path('', include(router.urls))

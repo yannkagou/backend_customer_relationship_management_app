@@ -8,6 +8,6 @@ router = DefaultRouter()
 router.register('teams', TeamViewSet, basename='teams')
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('teams/get_my_team', get_my_team, name='get_my_team')
+    path('teams/get_my_team', get_my_team, name='get_my_team'),
+    path('', include(router.urls))
 ]

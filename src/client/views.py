@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 
 from rest_framework import viewsets
 
-from .models import Client
-from .serializers import ClientSerializer
+from .models import Client, Note
+from .serializers import ClientSerializer, NoteSerializer
 
 from team.models import Team
 class ClientViewSet(viewsets.ModelViewSet):
@@ -17,4 +17,19 @@ class ClientViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         team = Team.objects.filter(members__in=[self.request.user]).first()
         serializer.save(team=team, created_by=self.request.user)
+        
+class NoteViewSet(viewsets.ModelViewSet):
+    serializer_class = NoteSerializer
+    queryset = Note.objects.all()
+    
+    def get_queryset(self):
+        team = Team.objects.filter(members__in=[self.request.user]).first()
+        client_id = self.request.GET.get('client_id')
+        
+        return self.queryset.filter(team=team).filter(client_id=client_id)
+    
+    def perform_create(self, serializer):
+        team = Team.objects.filter(members__in=[self.request.user]).first()
+        client_id = self.request.data['client_id']
+        serializer.save(team=team, created_by=self.request.user, client_id=client_id)
 
